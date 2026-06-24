@@ -1,24 +1,676 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>swim.ing</title>
-  <style>
-    body { margin: 0; font-family: system-ui, sans-serif; background: #eef6ff; color: #102a43; }
-    main { max-width: 720px; margin: 8rem auto; padding: 2.5rem; background: white; border-radius: 24px; box-shadow: 0 18px 60px rgba(15, 23, 42, 0.12); text-align: center; }
-    h1 { margin: 0 0 1rem; font-size: 2.5rem; }
-    p { line-height: 1.7; color: #334e68; }
-    a { color: #1d4ed8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>swim.ing — le maillot qui change tout</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #F03A1F;
+    --pink: #FF0F87;
+    --black: #0A0A0A;
+    --white: #FAFAF8;
+    --gray: #F0EDEA;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    mix-blend-mode: difference;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+  .logo span { color: var(--red); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--red);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 60px 80px;
+    position: relative;
+  }
+
+  .hero-right {
+    background: var(--pink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+
+  .hero-title .dot { color: var(--black); }
+
+  .hero-sub {
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 360px;
+    opacity: 0.9;
+  }
+
+  /* Maillot illustration */
+  .swimsuit {
+    width: 280px;
+    height: 380px;
+    position: relative;
+  }
+
+  .swimsuit svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.3));
+  }
+
+  /* Badges produit */
+  .badge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 40px;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .badge {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--white);
+    flex-shrink: 0;
+  }
+
+  /* SECTION PROBLÈME */
+  .problem {
+    background: var(--white);
+    color: var(--black);
+    padding: 120px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .problem-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .stat-block {
+    padding: 40px 32px;
+    background: var(--gray);
+  }
+
+  .stat-block:first-child { background: var(--black); color: var(--white); }
+  .stat-block:nth-child(3) { background: var(--red); color: var(--white); }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 300;
+    opacity: 0.8;
+  }
+
+  .problem-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+
+  .problem-text h2 em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .problem-text p {
+    font-size: 16px;
+    line-height: 1.8;
+    font-weight: 300;
+    color: #444;
+    max-width: 400px;
+  }
+
+  /* SECTION PRODUIT */
+  .product {
+    background: var(--black);
+    padding: 120px 80px;
+  }
+
+  .product-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+
+  .product-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 1;
+  }
+
+  .product-header h2 span { color: var(--red); }
+  .product-header h2 em { font-style: normal; color: var(--pink); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .feature {
+    background: #141414;
+    padding: 40px 32px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .feature:hover { border-bottom-color: var(--red); }
+
+  .feature-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: #2a2a2a;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .feature-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--white);
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #888;
+  }
+
+  /* SECTION SIGNUP */
+  .signup {
+    background: var(--pink);
+    padding: 120px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .signup-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .signup-text p {
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    max-width: 360px;
+  }
+
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 0;
+    padding: 18px 20px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .form-input::placeholder { color: rgba(255,255,255,0.4); }
+  .form-input:focus { border-color: var(--white); background: rgba(255,255,255,0.2); }
+
+  .form-select {
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 0;
+    padding: 18px 20px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .form-select option { background: #333; color: var(--white); }
+
+  .submit-btn {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 20px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    width: 100%;
+  }
+
+  .submit-btn:hover { background: var(--red); }
+  .submit-btn:active { transform: scale(0.99); }
+
+  .form-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* SUCCESS */
+  .success-msg {
+    display: none;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 32px;
+    text-align: center;
+  }
+
+  .success-msg.show { display: block; }
+
+  .success-msg h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .success-msg p { font-size: 14px; font-weight: 300; opacity: 0.8; }
+
+  /* COUNTER */
+  .counter-bar {
+    background: var(--black);
+    border-top: 1px solid #222;
+    padding: 24px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .counter-text {
+    font-size: 13px;
+    color: #666;
+    font-weight: 300;
+  }
+
+  .counter-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--pink);
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 2px;
+    background: #222;
+    max-width: 200px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--pink);
+    width: 0%;
+    transition: width 1s ease;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-logo span { color: var(--red); }
+
+  footer p { font-size: 12px; color: #444; font-weight: 300; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * { animation: fadeUp 0.8s ease both; }
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-right > * { animation: fadeUp 0.8s ease both; animation-delay: 0.4s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 100px 32px 60px; }
+    .hero-right { padding: 60px 32px; min-height: 60vh; }
+    .hero-title { font-size: 72px; }
+    .problem { grid-template-columns: 1fr; padding: 80px 32px; gap: 48px; }
+    .problem-text { order: -1; }
+    .product { padding: 80px 32px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .signup { grid-template-columns: 1fr; padding: 80px 32px; gap: 48px; }
+    .counter-bar { padding: 20px 32px; }
+    footer { padding: 32px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
 </head>
 <body>
-  <main>
-    <h1>swim.ing</h1>
-    <p>Votre site GitHub Pages est maintenant en ligne.</p>
-    <p>Si vous voyez cette page, tout fonctionne.</p>
-    <p><a href="https://github.com/ophe-lpmv/ing-landing">Voir le dépôt GitHub</a></p>
-  </main>
+
+<nav>
+  <div class="logo">-<span>ing</span>.</div>
+  <div style="font-size: 12px; font-weight: 300; letter-spacing: 0.08em; opacity: 0.6">Bientôt disponible</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Le sport sans obstacles — swim.ing</p>
+    <h1 class="hero-title">Le maillot<br>qui change<br>tout<span class="dot">.</span></h1>
+    <p class="hero-sub">Le premier maillot de bain conçu pour les ados filles — protection menstruelle intégrée, maintien réel, style assumé.</p>
+  </div>
+
+  <div class="hero-right">
+    <div class="swimsuit">
+      <svg viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Maillot 1 pièce -->
+        <path d="M95 40 C95 40 70 45 60 80 C50 115 48 140 50 160 C52 180 55 200 58 220 C62 245 65 270 68 300 C71 325 74 345 76 360 L204 360 C206 345 209 325 212 300 C215 270 218 245 222 220 C225 200 228 180 230 160 C232 140 230 115 220 80 C210 45 185 40 185 40" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+        <!-- Encolure -->
+        <path d="M95 40 C110 30 130 25 140 25 C150 25 170 30 185 40" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" fill="none"/>
+        <!-- Bretelles -->
+        <path d="M95 40 L80 15" stroke="rgba(255,255,255,0.6)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M185 40 L200 15" stroke="rgba(255,255,255,0.6)" stroke-width="8" stroke-linecap="round"/>
+        <!-- Dos ouvert (dos nageur) -->
+        <path d="M80 15 C85 10 90 8 100 10 C110 12 130 15 140 15 C150 15 170 12 180 10 C190 8 195 10 200 15" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-dasharray="4 3"/>
+        <!-- Zone maintien poitrine -->
+        <path d="M85 95 C90 75 115 65 140 65 C165 65 190 75 195 95 C200 110 195 130 185 140 C175 148 160 152 140 152 C120 152 105 148 95 140 C85 130 80 110 85 95Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <!-- Zone protection menstruelle -->
+        <rect x="105" y="280" width="70" height="50" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+        <!-- Label protection -->
+        <text x="140" y="310" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" font-weight="400">protection</text>
+        <!-- Logo -ing. -->
+        <text x="140" y="220" text-anchor="middle" font-family="'Bebas Neue', cursive" font-size="16" fill="rgba(255,255,255,0.3)" letter-spacing="2">-ING.</text>
+        <!-- Coutures décoratives -->
+        <line x1="140" y1="155" x2="140" y2="275" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3 4"/>
+      </svg>
+    </div>
+
+    <div class="badge-list">
+      <div class="badge">Protection menstruelle 5 couches</div>
+      <div class="badge">Maintien poitrine sans armature</div>
+      <div class="badge">Dos haut pour l'acné</div>
+      <div class="badge">Tailles pensées pour le corps ado</div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTER -->
+<div class="counter-bar">
+  <span class="counter-text">Déjà intéressées</span>
+  <span class="counter-num" id="counter">0</span>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <span class="counter-text">objectif 200</span>
+</div>
+
+<!-- PROBLÈME -->
+<section class="problem">
+  <div class="problem-stats">
+    <div class="stat-block">
+      <div class="stat-num">–50%</div>
+      <div class="stat-label">d'activité physique entre 11 et 14 ans chez les filles</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num" style="font-size:48px">2×</div>
+      <div class="stat-label">plus que les garçons du même âge qui arrêtent le sport</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">#1</div>
+      <div class="stat-label">raison citée : le regard des autres sur leur corps</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num" style="font-size:36px; color: var(--red)">0</div>
+      <div class="stat-label" style="color:#444">marques sport pensées pour le corps ado en pleine puberté</div>
+    </div>
+  </div>
+
+  <div class="problem-text">
+    <h2>Elles arrêtent.<br>Pas parce<br>qu'elles <em>veulent.</em></h2>
+    <p>À la piscine, avoir ses règles = sortir du bassin. Pas de solution, pas de marque, pas de produit qui réponde vraiment. On a conçu swim.ing pour ça : nager sans y penser, quel que soit le moment du mois.</p>
+  </div>
+</section>
+
+<!-- PRODUIT -->
+<section class="product">
+  <div class="product-header">
+    <h2>swim<span>.</span><em>ing</em></h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-num">01</div>
+      <div class="feature-title">Protection menstruelle intégrée</div>
+      <div class="feature-desc">5 couches absorbantes résistantes au chlore et à l'eau salée. Flux léger à moyen. Nager normalement.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-num">02</div>
+      <div class="feature-title">Maintien de la poitrine</div>
+      <div class="feature-desc">Soutien réel sans armature, sans effet "soutien-gorge visible". Pensé pour les premières poitrines.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-num">03</div>
+      <div class="feature-title">Dos haut couvert</div>
+      <div class="feature-desc">Tissu remonté dans le dos pour couvrir l'acné dorsale — une réalité de la puberté que personne ne prend en compte.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-num">04</div>
+      <div class="feature-title">Coupe taille haute</div>
+      <div class="feature-desc">Reste en place dans l'eau. Couvre, maintient, ne remonte pas. Conçu pour des corps en mouvement.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-num">05</div>
+      <div class="feature-title">Style assumé</div>
+      <div class="feature-desc">Coloris tendance. Pas le noir médical. Pas le bleu marine générique. Un maillot qu'on veut vraiment porter.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-num">06</div>
+      <div class="feature-title">Prix accessible</div>
+      <div class="feature-desc">45–55 €. Moitié moins cher que Smoon. Parce que ce produit doit être accessible à toutes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="signup" id="signup">
+  <div class="signup-text">
+    <h2>Sois la<br>première<br>à savoir.</h2>
+    <p>swim.ing sort bientôt. Laisse ton email pour être avertie en avant-première — et avoir accès au prix de lancement.</p>
+  </div>
+
+  <div>
+    <div class="signup-form" id="form-container">
+      <div>
+        <label class="form-label" for="email">Ton email</label>
+        <input type="email" id="email" class="form-input" placeholder="ton@email.com" autocomplete="email">
+      </div>
+      <div>
+        <label class="form-label" for="role">Tu es</label>
+        <select id="role" class="form-select">
+          <option value="">Sélectionne...</option>
+          <option value="ado">Une ado (je nage / je fais du sport)</option>
+          <option value="parent">Un parent</option>
+          <option value="coach">Coach / prof d'EPS</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <button class="submit-btn" onclick="handleSubmit()">JE VEUX ÊTRE AVERTIE →</button>
+      <p class="form-note">Pas de spam. Juste un email quand swim.ing est disponible. Tu peux te désinscrire à tout moment.</p>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <h3>C'est noté !</h3>
+      <p>On t'envoie un email dès que swim.ing est disponible.<br>Merci d'être là depuis le début.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">-<span>ing</span>.</div>
+  <p>mov.ing · grow.ing · swim.ing · play.ing</p>
+  <p>© 2025 -ing. — Tous droits réservés</p>
+</footer>
+
+<script>
+  let emailCount = 0;
+  const TARGET = 200;
+
+  function animateCounter(target) {
+    const el = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    let current = 0;
+    const duration = 1200;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const pct = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - pct, 3);
+      current = Math.round(eased * target);
+      el.textContent = current;
+      progress.style.width = (current / TARGET * 100) + '%';
+      if (pct < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  setTimeout(() => animateCounter(47), 800);
+
+  function handleSubmit() {
+    const email = document.getElementById('email').value;
+    const role = document.getElementById('role').value;
+    if (!email || !email.includes('@')) {
+      document.getElementById('email').style.borderColor = '#ff4444';
+      document.getElementById('email').placeholder = 'Entre un email valide';
+      return;
+    }
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('success-msg').classList.add('show');
+    emailCount++;
+    animateCounter(48 + emailCount);
+  }
+
+  document.getElementById('email').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleSubmit();
+    this.style.borderColor = '';
+  });
+
+  const scrollBtn = document.querySelector('.submit-btn');
+  document.querySelectorAll('a[href="#signup"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
 </body>
 </html>
