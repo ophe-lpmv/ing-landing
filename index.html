@@ -37,6 +37,7 @@
   .stat-red { background: var(--red); color: var(--white); }
   .stat-v2-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; margin-bottom: 8px; }
   .stat-v2-label { font-size: 12px; line-height: 1.5; font-weight: 300; opacity: 0.85; }
+  .problem-v2-baseline-wrap { background: var(--white); width: 100%; }
   .problem-v2-baseline { background: var(--white); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; letter-spacing: 0.01em; padding: 0 80px 100px; max-width: 900px; margin: 0 auto; line-height: 1.2; text-align: center; }
 
   .product { background: var(--black); padding: 120px 80px; }
@@ -70,6 +71,7 @@
   .success-msg h3 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 8px; }
   .success-msg p { font-size: 14px; font-weight: 300; opacity: 0.8; }
 
+  .counter-bar { background: var(--black); border-top: 1px solid #222; padding: 24px 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
   .counter-text { font-size: 13px; color: #666; font-weight: 300; }
   .counter-num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--pink); }
   .progress-bar { flex: 1; height: 2px; background: #222; max-width: 200px; }
@@ -99,6 +101,7 @@
     .product { padding: 80px 32px; }
     .features-grid { grid-template-columns: 1fr; }
     .signup { grid-template-columns: 1fr; padding: 80px 32px; gap: 48px; }
+    .counter-bar { padding: 20px 32px; }
     footer { padding: 32px; flex-direction: column; gap: 12px; text-align: center; }
   }
 </style>
@@ -149,7 +152,9 @@
   </div>
 </section>
 
+<div class="problem-v2-baseline-wrap">
 <p class="problem-v2-baseline">Nous sommes la seule marque de sport pensée pour le corps ado en pleine puberté</p>
+</div>
 
 <section class="product">
   <div class="product-header"><h2>swim<span>.</span><em>ing</em></h2></div>
